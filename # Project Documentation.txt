@@ -1,0 +1,165 @@
+# Project Documentation – MMO AI Database Assistant
+
+This project implements a multi-layer database system for an MMO-style environment, integrating a cloud-hosted MySQL database with an AI-powered natural language interface and a web-based user interface.
+
+
+
+## 1. Environment Setup
+
+The development environment was prepared by installing the required Python dependencies using:
+
+```bash
+pip install -r requirements.txt
+```
+
+Key libraries included:
+
+* FastAPI (API backend)
+* Uvicorn (ASGI server)
+* MySQL Connector (database connectivity)
+* Python-dotenv (environment variable handling)
+* Streamlit (frontend UI)
+* Requests and Pandas (data handling and API communication)
+* Anthropic SDK (AI integration)
+
+
+
+## 2. Database Configuration
+
+A relational MySQL database was created and hosted on a cloud provider (Railway). The schema was implemented using a structured SQL script containing:
+
+* Core tables (users, characters, items, transactions, etc.)
+* Foreign key relationships for referential integrity
+* Analytical views (e.g., `vw_inventory_value`, `vw_suspicious_login_activity`)
+* Stored procedures for transactional workflows
+
+The SQL script was executed through MySQL Workbench after connecting to the Railway database instance.
+
+
+
+## 3. Backend Development (FastAPI)
+
+A REST API was developed using FastAPI.
+
+### Key Endpoints:
+
+* `/query` – Executes direct SQL queries with safety validation
+* `/ask` – Accepts natural language input and returns AI-generated SQL results
+* `/characters`, `/richest`, `/suspicious-transactions` – Predefined query endpoints
+
+### Implementation Steps:
+
+* Created database connection logic in `db.py`
+* Loaded environment variables using `.env`
+* Implemented query safety checks (restricting to SELECT statements)
+* Added default query limits to prevent excessive data retrieval
+* Integrated AI-generated SQL execution within the `/ask` endpoint
+
+Errors encountered during development included:
+
+* Database connection failures due to incorrect environment variable parsing
+* SQL syntax issues related to constraints and cloud compatibility
+* Indentation and syntax errors in Python files
+
+These were resolved by:
+
+* Correcting `.env` structure and loading method
+* Adjusting SQL schema for MySQL 9.4 cloud limitations
+* Fixing Python indentation and variable references
+
+
+
+## 4. AI Integration
+
+The Anthropic API was integrated to enable natural language to SQL translation.
+
+### Steps:
+
+* Installed and configured the Anthropic client
+* Stored API key securely in `.env`
+* Created `generate_sql()` function to convert user queries into SQL
+* Defined a structured `SCHEMA_CONTEXT` to guide AI output
+* Implemented `explain_query()` to provide human-readable explanations
+
+The AI was constrained to:
+
+* Generate only SELECT queries
+* Use predefined schema elements
+* Avoid unsafe operations
+
+
+
+## 5. Frontend Development (Streamlit)
+
+A user interface was developed using Streamlit.
+
+### Features:
+
+* Text input for natural language queries
+* Sidebar with predefined test prompts
+* Display of generated SQL queries
+* Tabular visualization of query results
+* Direct API testing buttons
+
+### Implementation Steps:
+
+* Created `app.py`
+* Connected frontend to FastAPI endpoints via HTTP requests
+* Handled API responses and displayed results using Pandas DataFrames
+* Added error handling for failed API calls
+
+Errors encountered:
+
+* Indentation errors in Streamlit script
+* API connection issues due to incorrect endpoint configuration
+
+These were resolved by:
+
+* Cleaning code structure
+* Ensuring proper API URL configuration
+* Adding request timeouts and exception handling
+
+
+
+## 6. Testing and Validation
+
+The system was tested using:
+
+* FastAPI Swagger UI (`/docs`)
+* Streamlit interface
+* Sample natural language prompts
+
+Example queries:
+
+* “Who are the richest characters?”
+* “Show suspicious login activity”
+* “Show recent transactions”
+
+Validation confirmed:
+
+* Correct SQL generation
+* Successful database execution
+* Accurate result display
+
+
+
+## 7. Version Control and Security
+
+The project was uploaded to GitHub with the following precautions:
+
+* `.env` file excluded via `.gitignore`
+* `.env.example` provided for configuration reference
+* No API keys or database credentials uploaded
+
+---
+
+## 8. Final System Overview
+
+The completed system consists of:
+
+1. A cloud-hosted relational database
+2. A FastAPI backend handling query logic and AI integration
+3. An AI layer translating natural language into SQL
+4. A Streamlit frontend for user interaction
+
+Demonstrated a full pipeline from user input to structured database output, integrating modern AI-assisted querying with traditional relational database design.
