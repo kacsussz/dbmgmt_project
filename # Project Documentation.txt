@@ -150,7 +150,7 @@ The project was uploaded to GitHub with the following precautions:
 * `.env` file excluded via `.gitignore`
 * `.env.example` provided for configuration reference
 * No API keys or database credentials uploaded
-
+   
 ---
 
 ## 8. Final System Overview
